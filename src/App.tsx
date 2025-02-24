@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import './app.css'
 import Login from './pages/Login'
 
 function App() {
@@ -13,3 +14,4 @@ function App() {
 }
 
 export default App
+
