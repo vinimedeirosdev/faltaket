@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState } from 'react'
 import { 
   Box, 
@@ -11,12 +10,32 @@ import { useNavigate } from 'react-router-dom'
 import backgroundLogin from '../assets/peakpx.jpg'
 //@ts-ignore
 import '@fontsource/caveat'
+import faltaketService from '../services/faltaket.service'
 
 function Register() {
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [user, setUser] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+
+  const actions = {
+    async register() {
+      try {
+        const data = await faltaketService.register({
+          name: name,
+          user: user,
+          password: password,
+        })        
+
+        if(data.success) {
+          navigate('/')
+        }
+
+      } catch (error) {
+        console.error('Error registering:', error)
+      }
+    }
+  }
 
   return (
     <Box sx={{
@@ -53,8 +72,8 @@ function Register() {
               margin="normal"
               fullWidth
               label="Usuário"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -68,6 +87,7 @@ function Register() {
               fullWidth
               variant="contained"
               sx={{ mt: 2, backgroundColor: '#aedfb1', color: 'black' }}
+              onClick={actions.register}
             >
               Cadastrar
             </Button>
