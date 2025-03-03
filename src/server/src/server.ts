@@ -44,6 +44,12 @@ class Router {
             const result = await this.ctrl.register({ name, user, password });
             res.json(result);
         });
+
+        app.post('/login', async (req, res) => {
+            const { user, password } = req.body;
+            const result = await this.ctrl.login(user, password);
+            res.json(result);
+        })
     }
 }
 
