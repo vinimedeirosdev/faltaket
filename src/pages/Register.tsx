@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Box, TextField, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Container,
+  Typography,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import backgroundLogin from "../assets/peakpx.jpg";
 //@ts-ignore
@@ -7,14 +15,20 @@ import "@fontsource/caveat";
 import faltaketService from "../services/faltaket.service";
 import { ToastContainer, toast } from "react-toastify";
 import globalState from "../store/globalState";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Register() {
   const [name, setName] = useState("");
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const actions = {
+    handleClickShowPassword() {
+      setShowPassword(!showPassword);
+    },
+
     async onClickRegister() {
       if (
         !name ||
@@ -114,13 +128,26 @@ function Register() {
               margin="normal"
               fullWidth
               label="Senha"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   actions.onClickRegister();
                 }
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={actions.handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
             <Button
