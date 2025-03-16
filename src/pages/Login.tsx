@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Container,
+  Typography,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import backgroundLogin from "../assets/peakpx.jpg";
 //@ts-ignore
@@ -14,8 +23,13 @@ function Login() {
 
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const actions = {
+    handleClickShowPassword() {
+      setShowPassword(!showPassword);
+    },
+
     async onClickLogin() {
       if (!user || user.trim() == "" || !password || password.trim() == "") {
         toast.warning("Todos os campos devem ser preenchidos.");
@@ -83,13 +97,26 @@ function Login() {
               margin="normal"
               fullWidth
               label="Senha"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   actions.onClickLogin();
                 }
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={actions.handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
             <Button
