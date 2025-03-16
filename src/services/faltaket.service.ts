@@ -1,6 +1,6 @@
 import axios from "axios"
 import { iLoginResponse, iRegisterParam, iRegisterResponse } from "../interfaces";
-const baseURL = `http://localhost:3000`;
+const baseURL = `https://faltaket-server.onrender.com`;
 
 type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse>
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>
