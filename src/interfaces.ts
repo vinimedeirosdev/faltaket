@@ -20,3 +20,17 @@ export interface iLoginResponse {
         password: string
     }
 }
+
+export interface iGetMateriasResponse {
+    id: string,
+    nome: string,
+    semana: number,
+    id_user: string,
+    faltas: iFalta[]
+}
+
+export interface iFalta {
+    id: string,
+    indice: number,
+    active: boolean
+}
