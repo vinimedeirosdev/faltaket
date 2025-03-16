@@ -17,6 +17,15 @@ interface Props {
 function CardMateria({ materia }: Props) {
   const [faltas, setFaltas] = useState<iFalta[]>(materia.faltas);
 
+  // Verifica se todos os checkboxes estão marcados
+  const allFaltasActive =
+    faltas.length > 0 && faltas.every((falta) => falta.active);
+
+  // Verifica se falta apenas um checkbox para todos estarem marcados
+  const missingOneFalta =
+    faltas.length > 1 &&
+    faltas.filter((falta) => falta.active).length === faltas.length - 1;
+
   const actions = {
     setSemana(value: number) {
       switch (value) {
@@ -46,13 +55,19 @@ function CardMateria({ materia }: Props) {
         )
       );
     },
+
+    getCardColor() {
+      if (allFaltasActive) return "#fca5a5"; // Vermelho claro
+      if (missingOneFalta) return "#fff2cc"; // Amarelo claro
+      return "#f7e6ff"; // Cor original
+    },
   };
 
   return (
     <div>
       <Card
         sx={{
-          backgroundColor: "#f7e6ff",
+          backgroundColor: actions.getCardColor(),
           borderRadius: "16px",
         }}
       >
