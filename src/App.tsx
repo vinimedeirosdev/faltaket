@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import { iUser } from "./store/globalInterface";
 import faltaketService from "./services/faltaket.service";
 import globalState from "./store/globalState";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
 
 function AppContent() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const user: iUser = JSON.parse(localStorage.getItem("user") as string);
@@ -25,12 +26,14 @@ function AppContent() {
       actions.login(user.user, user.password);
     } else {
       navigate("/");
+      setIsLoading(false);
     }
   }, []);
 
   const actions = {
     async login(user: string, password: string) {
       try {
+        setIsLoading(true);
         const data = await faltaketService.login(user, password);
 
         if (data.success) {
@@ -40,17 +43,26 @@ function AppContent() {
         }
       } catch (error) {
         console.error("Error login:", error);
+      } finally {
+        setIsLoading(false);
       }
     },
   };
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
+      {isLoading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Carregando...</p>
+        </div>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      )}
     </>
   );
 }

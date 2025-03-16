@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'Faltaket',
         short_name: 'Faltaket',
         description: 'Um Progressive Web App para gerenciar faltas',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        theme_color: '#F3C1CC',
+        background_color: '#F3C1CC',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
