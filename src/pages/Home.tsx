@@ -7,6 +7,7 @@ import {
   Menu,
   MenuItem,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import globalState from "../store/globalState";
 import { useNavigate } from "react-router-dom";
@@ -19,15 +20,15 @@ import service from "../services/faltaket.service";
 import { iGetMateriasResponse } from "../interfaces";
 
 function Home() {
-  useEffect(() => {
-    actions.getMaterias();
-  }, []);
-
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
   const [materia, setMateria] = useState<iGetMateriasResponse[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    actions.getMaterias();
+  }, []);
 
   const actions = {
     async onClickLogout() {
@@ -51,6 +52,7 @@ function Home() {
     },
 
     async getMaterias() {
+      setLoading(true);
       try {
         const data = await service.getMaterias(globalState.user.id.toString());
 
@@ -65,6 +67,8 @@ function Home() {
         setMateria(data);
       } catch (error) {
         console.error("Error getMaterias:", error);
+      } finally {
+        setLoading(false);
       }
     },
   };
@@ -150,9 +154,20 @@ function Home() {
             maxHeight: "calc(100vh - 200px)",
           }}
         >
-          {materia.map((item) => (
-            <CardMateria key={item.id} materia={item} />
-          ))}
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+              }}
+            >
+              <CircularProgress sx={{ color: "#c4b5fd" }} />
+            </Box>
+          ) : (
+            materia.map((item) => <CardMateria key={item.id} materia={item} />)
+          )}
         </div>
       </div>
     </Box>
