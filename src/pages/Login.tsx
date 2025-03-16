@@ -8,6 +8,7 @@ import {
   Typography,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -24,6 +25,7 @@ function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const actions = {
     handleClickShowPassword() {
@@ -40,6 +42,7 @@ function Login() {
 
     async login(user: string, password: string) {
       try {
+        setIsLoading(true);
         const data = await faltaketService.login(user, password);
 
         if (data.success) {
@@ -54,6 +57,8 @@ function Login() {
       } catch (error) {
         toast.error("Erro ao efetuar o login.");
         console.error("Error login:", error);
+      } finally {
+        setIsLoading(false);
       }
     },
   };
@@ -92,6 +97,7 @@ function Login() {
               autoFocus
               value={user}
               onChange={(e) => setUser(e.target.value)}
+              disabled={isLoading}
             />
             <TextField
               margin="normal"
@@ -105,6 +111,7 @@ function Login() {
                   actions.onClickLogin();
                 }
               }}
+              disabled={isLoading}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -112,6 +119,7 @@ function Login() {
                       aria-label="toggle password visibility"
                       onClick={actions.handleClickShowPassword}
                       edge="end"
+                      disabled={isLoading}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -124,8 +132,13 @@ function Login() {
               variant="contained"
               onClick={() => actions.onClickLogin()}
               sx={{ mt: 2, backgroundColor: "#aedfb1", color: "black" }}
+              disabled={isLoading}
             >
-              Login
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Login"
+              )}
             </Button>
 
             <Button
@@ -133,6 +146,7 @@ function Login() {
               variant="contained"
               sx={{ mt: 2, backgroundColor: "#b2dcf9", color: "black" }}
               onClick={() => navigate("/register")}
+              disabled={isLoading}
             >
               Cadastrar
             </Button>

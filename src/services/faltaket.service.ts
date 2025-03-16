@@ -1,6 +1,6 @@
 import axios from "axios"
 import { iLoginResponse, iRegisterParam, iRegisterResponse } from "../interfaces";
-const baseURL = `${window.location.protocol}//${window.location.hostname}:5000`;
+const baseURL = `http://localhost:3000`;
 
 type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse>
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>

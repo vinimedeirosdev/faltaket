@@ -7,6 +7,7 @@ import {
   Typography,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import backgroundLogin from "../assets/peakpx.jpg";
@@ -22,6 +23,7 @@ function Register() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const actions = {
@@ -47,6 +49,7 @@ function Register() {
 
     async register() {
       try {
+        setLoading(true);
         const data = await faltaketService.register({
           name: name,
           user: user,
@@ -78,6 +81,8 @@ function Register() {
       } catch (error) {
         toast.error("Erro ao registrar. Tente novamente.");
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     },
   };
@@ -116,6 +121,7 @@ function Register() {
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -123,6 +129,7 @@ function Register() {
               label="Usuário"
               value={user}
               onChange={(e) => setUser(e.target.value)}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -132,10 +139,11 @@ function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && !loading) {
                   actions.onClickRegister();
                 }
               }}
+              disabled={loading}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -143,6 +151,7 @@ function Register() {
                       aria-label="toggle password visibility"
                       onClick={actions.handleClickShowPassword}
                       edge="end"
+                      disabled={loading}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -155,14 +164,20 @@ function Register() {
               variant="contained"
               sx={{ mt: 2, backgroundColor: "#aedfb1", color: "black" }}
               onClick={actions.onClickRegister}
+              disabled={loading}
             >
-              Cadastrar
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Cadastrar"
+              )}
             </Button>
             <Button
               fullWidth
               variant="contained"
               sx={{ mt: 2, backgroundColor: "#b2dcf9", color: "black" }}
               onClick={() => navigate("/")}
+              disabled={loading}
             >
               Voltar
             </Button>
