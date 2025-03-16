@@ -118,7 +118,6 @@ function Register() {
               margin="normal"
               fullWidth
               label="Nome"
-              autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={loading}
