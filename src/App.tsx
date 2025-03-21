@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import "./app.css";
 import Login from "./pages/Login";

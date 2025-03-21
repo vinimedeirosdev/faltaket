@@ -1,7 +1,7 @@
 import { iUser } from "./globalInterface"
 
 const user: iUser = {
-    id: 0,
+    id: '',
     name: '',
     user: '',
     password: ''

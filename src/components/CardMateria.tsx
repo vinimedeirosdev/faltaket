@@ -48,10 +48,10 @@ function CardMateria({ materia }: Props) {
       }
     },
 
-    activeFalta(id: string) {
+    activeFalta(indice: number) {
       setFaltas((prevFaltas) =>
         prevFaltas.map((falta) =>
-          falta.id == id ? { ...falta, active: !falta.active } : falta
+          falta.indice == indice ? { ...falta, active: !falta.active } : falta
         )
       );
     },
@@ -103,12 +103,12 @@ function CardMateria({ materia }: Props) {
         >
           {faltas.map((falta) => (
             <Checkbox
-              key={falta.id}
+              key={falta.indice}
               color="secondary"
               size="large"
               checked={falta.active}
               onClick={() => {
-                actions.activeFalta(falta.id);
+                actions.activeFalta(falta.indice);
               }}
             />
           ))}

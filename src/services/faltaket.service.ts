@@ -1,11 +1,12 @@
 import axios from "axios"
-import { iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse } from "../interfaces";
+import { iAddMateriaParam, iAddMateriaResponse, iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse } from "../interfaces";
 const baseURL = `https://faltaket-server.onrender.com`;
 // baseURL = `http://localhost:3000`;
 
 type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse>
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>
 type iGetMateriasFunction = (id_user: string) => Promise<iGetMateriasResponse[]>
+type iAddMateriaFunction = (param: iAddMateriaParam) => Promise<iAddMateriaResponse>
 
 const login: iLoginFunction = async (user, password) => {
     const { data } = await axios.post(baseURL + "/login", {
@@ -32,8 +33,17 @@ const getMaterias: iGetMateriasFunction = async (id_user) => {
     return data
 }
 
+const addMateria: iAddMateriaFunction = async (param) => {
+    const { data } = await axios.post(baseURL + "/addMateria", {
+        ...param
+    })
+
+    return data
+}
+
 export default {
     register,
     login,
-    getMaterias
+    getMaterias,
+    addMateria
 }

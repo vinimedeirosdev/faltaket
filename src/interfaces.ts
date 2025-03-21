@@ -14,7 +14,7 @@ export interface iLoginResponse {
     success: boolean,
     msg: string,
     user: {
-        id: number,
+        id: string,
         name: string,
         user: string,
         password: string
@@ -25,12 +25,30 @@ export interface iGetMateriasResponse {
     id: string,
     nome: string,
     semana: number,
-    id_user: string,
     faltas: iFalta[]
 }
 
 export interface iFalta {
-    id: string,
     indice: number,
     active: boolean
+}
+
+export interface iPropsAddMateria {
+    nome: string,
+    semana: number,
+    faltas: number,
+    id_materia: string
+}
+
+export interface iAddMateriaParam {
+    id_user: string,
+    nome: string,
+    semana: number,
+    faltas: number
+}
+
+export interface iAddMateriaResponse {
+    success: boolean,
+    msg: string,
+    id_materia: string
 }

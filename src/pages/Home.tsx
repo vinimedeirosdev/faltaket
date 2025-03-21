@@ -7,7 +7,8 @@ import {
   Menu,
   MenuItem,
   Typography,
-  CircularProgress,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 import globalState from "../store/globalState";
 import { useNavigate } from "react-router-dom";
@@ -17,24 +18,28 @@ import { useEffect, useState } from "react";
 import CardMateria from "../components/CardMateria";
 import backgroundHome from "../assets/9c1946a1386fcd9aa8a7c1c6f3169b1f.jpg";
 import service from "../services/faltaket.service";
-import { iGetMateriasResponse } from "../interfaces";
+import { iFalta, iGetMateriasResponse, iPropsAddMateria } from "../interfaces";
+import ModalAddMateria from "../components/ModalAddMateria";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 function Home() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [materia, setMateria] = useState<iGetMateriasResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true); // New state for dialog
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     actions.getMaterias();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {
     async onClickLogout() {
       localStorage.removeItem("user");
       globalState.user = {
-        id: 0,
+        id: "",
         name: "",
         user: "",
         password: "",
@@ -52,8 +57,9 @@ function Home() {
     },
 
     async getMaterias() {
-      setLoading(true);
       try {
+        setLoading(true);
+
         const data = await service.getMaterias(globalState.user.id.toString());
 
         if (data.length > 0) {
@@ -67,6 +73,56 @@ function Home() {
         setMateria(data);
       } catch (error) {
         console.error("Error getMaterias:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+
+    handleOpenDialog() {
+      setOpenDialog(true);
+    },
+
+    handleCloseDialog() {
+      setOpenDialog(false);
+    },
+
+    async handleAddMateria(newMateria: iPropsAddMateria) {
+      try {
+        setOpenDialog(false);
+
+        setLoading(true);
+
+        const data = await service.addMateria({
+          id_user: globalState.user.id,
+          nome: newMateria.nome,
+          faltas: newMateria.faltas,
+          semana: newMateria.semana,
+        });
+
+        if (data.success) {
+          const faltas: iFalta[] = [];
+
+          for (let i = 1; i <= newMateria.faltas; i++) {
+            faltas.push({
+              indice: i,
+              active: false,
+            });
+          }
+
+          const newMateriaData: iGetMateriasResponse = {
+            nome: newMateria.nome,
+            semana: newMateria.semana,
+            faltas: faltas,
+            id: data.id_materia,
+          };
+
+          setMateria((prevMaterias) => {
+            const materias = [...prevMaterias, newMateriaData];
+            return materias.sort((a, b) => a.semana - b.semana);
+          });
+        }
+      } catch (error) {
+        console.error("Error adding materia:", error);
       } finally {
         setLoading(false);
       }
@@ -93,9 +149,7 @@ function Home() {
                 backgroundColor: "#c4b5fd",
               },
             }}
-            onClick={() => {
-              /* sua função de clique aqui */
-            }}
+            onClick={actions.handleOpenDialog}
           >
             <Icon sx={{ marginBottom: "8px" }}>
               <Add color="secondary" />
@@ -154,22 +208,28 @@ function Home() {
             maxHeight: "calc(100vh - 200px)",
           }}
         >
-          {loading ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "200px",
-              }}
-            >
-              <CircularProgress sx={{ color: "#c4b5fd" }} />
-            </Box>
-          ) : (
-            materia.map((item) => <CardMateria key={item.id} materia={item} />)
-          )}
+          {materia.map((item) => (
+            <CardMateria key={item.id} materia={item} />
+          ))}
         </div>
       </div>
+
+      <Dialog
+        open={openDialog}
+        PaperProps={{
+          style: {
+            backgroundColor: "#ede9fe",
+          },
+        }}
+      >
+        <DialogContent>
+          <ModalAddMateria
+            onAdd={actions.handleAddMateria}
+            onClose={actions.handleCloseDialog}
+          />
+        </DialogContent>
+      </Dialog>
+      <LoadingOverlay loading={loading} />
     </Box>
   );
 }

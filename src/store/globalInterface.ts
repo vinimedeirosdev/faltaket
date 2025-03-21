@@ -1,5 +1,5 @@
 export interface iUser {
-    id: number,
+    id: string,
     name: string,
     user: string,
     password: string
