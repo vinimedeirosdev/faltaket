@@ -7,6 +7,7 @@ type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>
 type iGetMateriasFunction = (id_user: string) => Promise<iGetMateriasResponse[]>
 type iAddMateriaFunction = (param: iAddMateriaParam) => Promise<iAddMateriaResponse>
+type iDeleteMateriaaFunction = (id_materia: string) => Promise<iDeleteMateriaResponse>
 
 const login: iLoginFunction = async (user, password) => {
     const { data } = await axios.post(baseURL + "/login", {
@@ -41,9 +42,17 @@ const addMateria: iAddMateriaFunction = async (param) => {
     return data
 }
 
+const deleteMateria: iDeleteMateriaaFunction = async (id_materia) => {
+    const { data } = await axios.post(baseURL + "/deleteMateria", {
+        id_materia
+    })
+    return data
+}
+
 export default {
     register,
     login,
     getMaterias,
-    addMateria
+    addMateria,
+    deleteMateria
 }

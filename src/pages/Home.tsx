@@ -127,6 +127,22 @@ function Home() {
         setLoading(false);
       }
     },
+
+    async deleteMateria(id_materia: string) {
+      try {
+        setLoading(true);
+        const data = await service.deleteMateria(id_materia);
+        if (data.success) {
+          setMateria((prevMaterias) =>
+            prevMaterias.filter((materia) => materia.id !== id_materia)
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting materia:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
   };
 
   return (
@@ -209,7 +225,11 @@ function Home() {
           }}
         >
           {materia.map((item) => (
-            <CardMateria key={item.id} materia={item} />
+            <CardMateria
+              key={item.id}
+              materia={item}
+              deleteMateria={actions.deleteMateria}
+            />
           ))}
         </div>
       </div>

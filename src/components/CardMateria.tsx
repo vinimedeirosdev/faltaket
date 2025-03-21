@@ -12,10 +12,11 @@ import { useState } from "react";
 
 interface Props {
   materia: iGetMateriasResponse;
+  deleteMateria: (id_materia: string) => void;
 }
 
-function CardMateria({ materia }: Props) {
-  const [faltas, setFaltas] = useState<iFalta[]>(materia.faltas);
+function CardMateria(props: Props) {
+  const [faltas, setFaltas] = useState<iFalta[]>(props.materia.faltas);
 
   // Verifica se todos os checkboxes estão marcados
   const allFaltasActive =
@@ -61,6 +62,10 @@ function CardMateria({ materia }: Props) {
       if (missingOneFalta) return "#fff2cc"; // Amarelo claro
       return "#f7e6ff"; // Cor original
     },
+
+    deleteMateria() {
+      props.deleteMateria(props.materia.id);
+    },
   };
 
   return (
@@ -83,19 +88,19 @@ function CardMateria({ materia }: Props) {
               gutterBottom
               sx={{ color: "text.secondary", fontSize: 14 }}
             >
-              {actions.setSemana(materia.semana)}
+              {actions.setSemana(props.materia.semana)}
             </Typography>
             <div>
               <IconButton>
                 <Edit />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={actions.deleteMateria}>
                 <Delete />
               </IconButton>
             </div>
           </div>
           <Typography variant="h5" component="div">
-            {materia.nome}
+            {props.materia.nome}
           </Typography>
         </CardContent>
         <CardActions

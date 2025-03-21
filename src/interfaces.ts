@@ -52,3 +52,8 @@ export interface iAddMateriaResponse {
     msg: string,
     id_materia: string
 }
+
+export interface iDeleteMateriaResponse {
+    success: boolean,
+    msg: string
+}
