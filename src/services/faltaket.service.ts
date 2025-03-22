@@ -3,8 +3,10 @@ import {
     iAddMateriaParam, iAddMateriaResponse, iDeleteMateriaResponse, iEditMateriaParam, iEditMateriaResponse,
     iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse
 } from "../interfaces";
+
+// eslint-disable-next-line prefer-const
 let baseURL = `https://faltaket-server.onrender.com`;
-baseURL = `http://localhost:3000`;
+// baseURL = `http://localhost:3000`;
 
 type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse>
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>
