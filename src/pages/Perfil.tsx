@@ -127,7 +127,7 @@ function Perfil() {
   return (
     <div style={{ padding: "16px" }}>
       <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
+        style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
       >
         <Fab
           sx={{
