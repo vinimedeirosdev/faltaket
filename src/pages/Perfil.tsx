@@ -1,9 +1,8 @@
-import { Edit, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Avatar,
   Button,
   Checkbox,
-  Fab,
   IconButton,
   InputAdornment,
   TextField,
@@ -15,6 +14,8 @@ import { iUser } from "../store/globalInterface";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import service from "../services/faltaket.service";
+import LoadingOverlay from "../components/LoadingOverlay";
+import avatarImg from "../assets/avatarImg.jpg";
 
 function Perfil() {
   const [user, setUser] = useState(globalState.user.user);
@@ -26,6 +27,7 @@ function Perfil() {
   const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [userOld, setUserOld] = useState<iUser>(globalState.user);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -84,6 +86,8 @@ function Perfil() {
 
     async editUser() {
       try {
+        setLoading(true);
+
         const data = await service.editUser({
           id_user: globalState.user.id,
           alterarSenha: alterarSenhaCheck,
@@ -113,6 +117,8 @@ function Perfil() {
       } catch (err) {
         console.error(err);
         return;
+      } finally {
+        setLoading(false);
       }
     },
   };
@@ -122,28 +128,13 @@ function Perfil() {
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
       >
-        <Fab
+        <Avatar
+          src={avatarImg}
           sx={{
-            position: "relative",
             width: "100px",
             height: "100px",
           }}
-        >
-          <Avatar
-            sx={{
-              width: "100px",
-              height: "100px",
-            }}
-          ></Avatar>
-          <Edit
-            color="action"
-            sx={{
-              position: "absolute",
-              top: "10px",
-              right: "0",
-            }}
-          ></Edit>
-        </Fab>
+        ></Avatar>
       </div>
 
       <div
@@ -267,6 +258,7 @@ function Perfil() {
         </div>
       </div>
       <ToastContainer />
+      <LoadingOverlay loading={loading} />
     </div>
   );
 }
