@@ -1,0 +1,135 @@
+.termo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:calc(100vh - 90px);
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.envelope-wrapper {
+    position: relative;
+    transform: translateY(100vh);
+    transition: transform 1s ease;
+}
+
+.envelope-wrapper.entered {
+    transform: translateY(0);
+}
+
+.envelope {
+    position: relative;
+    width: 350px;
+    height: 220px;
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.8s ease, opacity 0.5s ease;
+    z-index: 2;
+}
+
+.envelope-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f78fb3; /* Rosa bonitinho */
+    border-radius: 5px;
+    z-index: 2;
+    transform-origin: top;
+    transition: transform 0.6s ease;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 140px;
+    background-color: #f06292; /* Rosa mais claro */
+    clip-path: polygon(0 0, 50% 80%, 100% 0);
+    transform-origin: top;
+    transition: transform 0.4s ease 0.2s;
+}
+
+.envelope-body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background-color: #f78fb3; 
+    border-radius: 0 0 5px 5px;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    background-position: center;
+}
+
+.letter {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    width: 500px;
+    max-width: 90vw;
+    background-color: white;
+    padding: 30px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    transition: all 0.6s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.letter.visible {
+    opacity: 1;
+    transform: translate(-50%, -270px);
+    pointer-events: auto;
+}
+
+.envelope.open {
+    transform: translateY(-150vh);
+    opacity: 0;
+}
+
+.envelope.open .envelope-front {
+    transform: rotateX(180deg);
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.letter h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+}
+
+.letter-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+}
+
+.letter-content p {
+    margin-bottom: 20px;
+}
+
+.accept-button {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 24px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.accept-button:hover {
+    background-color: #27ae60;
+    transform: scale(1.05);
+}
