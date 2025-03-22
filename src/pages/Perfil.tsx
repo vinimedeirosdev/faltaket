@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Checkbox,
+  Fab,
   IconButton,
   InputAdornment,
   TextField,
@@ -128,13 +129,20 @@ function Perfil() {
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
       >
-        <Avatar
-          src={avatarImg}
+        <Fab
           sx={{
             width: "100px",
             height: "100px",
           }}
-        ></Avatar>
+        >
+          <Avatar
+            src={avatarImg}
+            sx={{
+              width: "100px",
+              height: "100px",
+            }}
+          ></Avatar>
+        </Fab>
       </div>
 
       <div
