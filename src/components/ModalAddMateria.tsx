@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Grid,
   TextField,
@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
+import { iMateriaToEdit } from "../interfaces";
 
 interface ModalAddMateriaProps {
   onAdd: (materia: {
@@ -22,18 +23,35 @@ interface ModalAddMateriaProps {
     semana: number;
     id_materia: string;
   }) => void;
+  onEdit: (materia: {
+    nome: string;
+    faltas: number;
+    faltas_active: number;
+    semana: number;
+    id_materia: string;
+  }) => void;
   onClose: () => void;
+  materiaToEdit: iMateriaToEdit | null;
 }
 
 function ModalAddMateria(props: ModalAddMateriaProps) {
+  useEffect(() => {
+    if (props.materiaToEdit) {
+      setNome(props.materiaToEdit.nome);
+      setFaltas(props.materiaToEdit.faltas.length);
+      setSemana(props.materiaToEdit.semana);
+      setIdMateria(props.materiaToEdit.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [nome, setNome] = useState("");
   const [faltas, setFaltas] = useState(1);
   const [semana, setSemana] = useState(1);
+  const [id_materia, setIdMateria] = useState("");
 
   const actions = {
-    handleAdd() {
-      const id_materia = "1";
-
+    handleSave() {
       if (!nome || nome.trim() == "" || !semana) {
         toast.warning("Preencha todos os campos");
         return;
@@ -41,6 +59,18 @@ function ModalAddMateria(props: ModalAddMateriaProps) {
 
       if (faltas < 1 || faltas > 99) {
         toast.warning("O número de faltas deve ser entre 1 e 99");
+        return;
+      }
+
+      if (props.materiaToEdit) {
+        props.onEdit({
+          nome,
+          faltas,
+          faltas_active: props.materiaToEdit.faltas_active,
+          semana,
+          id_materia,
+        });
+
         return;
       }
 
@@ -57,7 +87,9 @@ function ModalAddMateria(props: ModalAddMateriaProps) {
           alignItems: "center",
         }}
       >
-        <DialogTitle sx={{ padding: 0 }}>Adicionar Matéria</DialogTitle>
+        <DialogTitle sx={{ padding: 0 }}>
+          {props.materiaToEdit ? "Editar Matéria" : "Adicionar Matéria"}
+        </DialogTitle>
         <IconButton size="small" onClick={props.onClose}>
           <Close fontSize="medium"></Close>
         </IconButton>
@@ -115,14 +147,14 @@ function ModalAddMateria(props: ModalAddMateriaProps) {
 
       <DialogActions sx={{ padding: 0, marginTop: "16px" }}>
         <Button
-          onClick={actions.handleAdd}
+          onClick={actions.handleSave}
           sx={{
             backgroundColor: "#c8eaca",
             color: "black",
           }}
           variant="contained"
         >
-          Adicionar
+          Salvar
         </Button>
       </DialogActions>
       <ToastContainer />

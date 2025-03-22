@@ -7,15 +7,20 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { iFalta, iGetMateriasResponse } from "../interfaces";
-import { useState } from "react";
+import { iFalta, iMaterias } from "../interfaces";
+import { useEffect, useState } from "react";
 
 interface Props {
-  materia: iGetMateriasResponse;
+  materia: iMaterias;
   deleteMateria: (id_materia: string) => void;
+  editMateria: (id_materia: string) => void;
 }
 
 function CardMateria(props: Props) {
+  useEffect(() => {
+    setFaltas(props.materia.faltas);
+  }, [props.materia.faltas]);
+
   const [faltas, setFaltas] = useState<iFalta[]>(props.materia.faltas);
 
   // Verifica se todos os checkboxes estão marcados
@@ -66,6 +71,10 @@ function CardMateria(props: Props) {
     deleteMateria() {
       props.deleteMateria(props.materia.id);
     },
+
+    editMateria() {
+      props.editMateria(props.materia.id);
+    },
   };
 
   return (
@@ -91,7 +100,7 @@ function CardMateria(props: Props) {
               {actions.setSemana(props.materia.semana)}
             </Typography>
             <div>
-              <IconButton>
+              <IconButton onClick={actions.editMateria}>
                 <Edit />
               </IconButton>
               <IconButton onClick={actions.deleteMateria}>

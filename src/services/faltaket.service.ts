@@ -1,13 +1,17 @@
 import axios from "axios"
-import { iAddMateriaParam, iAddMateriaResponse, iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse } from "../interfaces";
-const baseURL = `https://faltaket-server.onrender.com`;
-// baseURL = `http://localhost:3000`;
+import {
+    iAddMateriaParam, iAddMateriaResponse, iDeleteMateriaResponse, iEditMateriaParam, iEditMateriaResponse,
+    iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse
+} from "../interfaces";
+let baseURL = `https://faltaket-server.onrender.com`;
+baseURL = `http://localhost:3000`;
 
 type iLoginFunction = (user: string, password: string) => Promise<iLoginResponse>
 type iRegisterFunction = (param: iRegisterParam) => Promise<iRegisterResponse>
 type iGetMateriasFunction = (id_user: string) => Promise<iGetMateriasResponse[]>
 type iAddMateriaFunction = (param: iAddMateriaParam) => Promise<iAddMateriaResponse>
-type iDeleteMateriaaFunction = (id_materia: string) => Promise<iDeleteMateriaResponse>
+type iDeleteMateriaFunction = (id_materia: string) => Promise<iDeleteMateriaResponse>
+type iEditMateriaFunction = (param: iEditMateriaParam) => Promise<iEditMateriaResponse>
 
 const login: iLoginFunction = async (user, password) => {
     const { data } = await axios.post(baseURL + "/login", {
@@ -42,10 +46,18 @@ const addMateria: iAddMateriaFunction = async (param) => {
     return data
 }
 
-const deleteMateria: iDeleteMateriaaFunction = async (id_materia) => {
+const deleteMateria: iDeleteMateriaFunction = async (id_materia) => {
     const { data } = await axios.post(baseURL + "/deleteMateria", {
         id_materia
     })
+    return data
+}
+
+const editMateria: iEditMateriaFunction = async (param) => {
+    const { data } = await axios.post(baseURL + "/editMateria", {
+        ...param
+    })
+
     return data
 }
 
@@ -54,5 +66,6 @@ export default {
     login,
     getMaterias,
     addMateria,
-    deleteMateria
+    deleteMateria,
+    editMateria
 }

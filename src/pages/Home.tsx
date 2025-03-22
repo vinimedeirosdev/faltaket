@@ -18,7 +18,13 @@ import { useEffect, useState } from "react";
 import CardMateria from "../components/CardMateria";
 import backgroundHome from "../assets/9c1946a1386fcd9aa8a7c1c6f3169b1f.jpg";
 import service from "../services/faltaket.service";
-import { iFalta, iGetMateriasResponse, iPropsAddMateria } from "../interfaces";
+import {
+  iEditMateriaParam,
+  iFalta,
+  iMaterias,
+  iMateriaToEdit,
+  iPropsAddMateria,
+} from "../interfaces";
 import ModalAddMateria from "../components/ModalAddMateria";
 import LoadingOverlay from "../components/LoadingOverlay";
 
@@ -26,9 +32,10 @@ function Home() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [materia, setMateria] = useState<iGetMateriasResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // New state for dialog
+  const [materia, setMateria] = useState<iMaterias[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [openDialog, setOpenDialog] = useState(false);
+  const [editMateria, setEditMateria] = useState<iMateriaToEdit | null>(null);
 
   useEffect(() => {
     actions.getMaterias();
@@ -78,7 +85,26 @@ function Home() {
       }
     },
 
-    handleOpenDialog() {
+    handleOpenDialogInsert() {
+      setEditMateria(null);
+      setOpenDialog(true);
+    },
+
+    handleOpenDialogEdit(id_materia: string) {
+      const materiaSearch = materia.find(
+        (item: iMaterias) => item.id == id_materia
+      );
+
+      const faltas_active = materiaSearch?.faltas.filter((item) => item.active);
+
+      setEditMateria({
+        id: materiaSearch?.id || "",
+        nome: materiaSearch?.nome || "",
+        faltas: materiaSearch?.faltas || [],
+        faltas_active: faltas_active?.length || 0,
+        semana: materiaSearch?.semana || 1,
+      });
+
       setOpenDialog(true);
     },
 
@@ -109,7 +135,7 @@ function Home() {
             });
           }
 
-          const newMateriaData: iGetMateriasResponse = {
+          const newMateriaData: iMaterias = {
             nome: newMateria.nome,
             semana: newMateria.semana,
             faltas: faltas,
@@ -123,6 +149,56 @@ function Home() {
         }
       } catch (error) {
         console.error("Error adding materia:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+
+    async handleEditMateria(materiaToEdit: iEditMateriaParam) {
+      try {
+        setOpenDialog(false);
+        setLoading(true);
+
+        const data = await service.editMateria({
+          id_materia: materiaToEdit.id_materia,
+          nome: materiaToEdit.nome,
+          faltas: materiaToEdit.faltas,
+          semana: materiaToEdit.semana,
+          faltas_active: materiaToEdit.faltas_active,
+        });
+
+        if (data.success) {
+          const faltas: iFalta[] = [];
+
+          for (let i = 1; i <= materiaToEdit.faltas; i++) {
+            const faltas_active = materiaToEdit.faltas_active;
+
+            faltas.push({
+              indice: i,
+              active: faltas_active >= i ? true : false,
+            });
+          }
+
+          setMateria((prevMaterias) => {
+            const updatedMaterias = prevMaterias.map((materia) => {
+              if (materia.id === materiaToEdit.id_materia) {
+                const updatedMateria = {
+                  ...materia,
+                  nome: materiaToEdit.nome,
+                  semana: materiaToEdit.semana,
+                  faltas: faltas,
+                };
+
+                return updatedMateria;
+              }
+              return materia;
+            });
+
+            return updatedMaterias.sort((a, b) => a.semana - b.semana);
+          });
+        }
+      } catch (error) {
+        console.error(" Error editing materia:", error);
       } finally {
         setLoading(false);
       }
@@ -165,7 +241,7 @@ function Home() {
                 backgroundColor: "#c4b5fd",
               },
             }}
-            onClick={actions.handleOpenDialog}
+            onClick={actions.handleOpenDialogInsert}
           >
             <Icon sx={{ marginBottom: "8px" }}>
               <Add color="secondary" />
@@ -229,6 +305,7 @@ function Home() {
               key={item.id}
               materia={item}
               deleteMateria={actions.deleteMateria}
+              editMateria={actions.handleOpenDialogEdit}
             />
           ))}
         </div>
@@ -246,6 +323,8 @@ function Home() {
           <ModalAddMateria
             onAdd={actions.handleAddMateria}
             onClose={actions.handleCloseDialog}
+            materiaToEdit={editMateria}
+            onEdit={actions.handleEditMateria}
           />
         </DialogContent>
       </Dialog>

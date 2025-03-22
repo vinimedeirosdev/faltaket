@@ -21,12 +21,18 @@ export interface iLoginResponse {
     }
 }
 
-export interface iGetMateriasResponse {
+export interface iMaterias {
     id: string,
     nome: string,
     semana: number,
     faltas: iFalta[]
 }
+
+export interface iMateriaToEdit extends iMaterias {
+    faltas_active: number
+}
+
+export type iGetMateriasResponse = iMaterias
 
 export interface iFalta {
     indice: number,
@@ -56,4 +62,17 @@ export interface iAddMateriaResponse {
 export interface iDeleteMateriaResponse {
     success: boolean,
     msg: string
+}
+
+export interface iEditMateriaResponse {
+    success: boolean,
+    msg: string
+}
+
+export interface iEditMateriaParam {
+    id_materia: string,
+    nome: string,
+    semana: number,
+    faltas: number,
+    faltas_active: number
 }
