@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import globalState from "../store/globalState";
 import { useNavigate } from "react-router-dom";
-import { Add, Logout, Person } from "@mui/icons-material";
+import { Add, Description, Logout, Person } from "@mui/icons-material";
 import avatarImg from "../assets/avatarImg.jpg";
 import { useEffect, useState } from "react";
 import CardMateria from "../components/CardMateria";
@@ -294,11 +294,29 @@ function Home() {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate("/profile");
+              }}
+            >
               <Person fontSize="small" sx={{ mr: 1 }} />
               Perfil
             </MenuItem>
             <Divider />
+
+            {globalState?.user.id == "yIPgieu6guBJZUkLfeJA" && (
+              <MenuItem
+                onClick={() => {
+                  navigate("/termos");
+                }}
+              >
+                <Description fontSize="small" sx={{ mr: 1 }} />
+                Termo de Compromissos
+              </MenuItem>
+            )}
+
+            {globalState?.user.id == "yIPgieu6guBJZUkLfeJA" && <Divider />}
+
             <MenuItem onClick={actions.onClickLogout}>
               <Logout fontSize="small" sx={{ mr: 1 }} />
               Logout

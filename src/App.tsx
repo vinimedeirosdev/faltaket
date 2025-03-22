@@ -8,6 +8,8 @@ import { iUser } from "./store/globalInterface";
 import faltaketService from "./services/faltaket.service";
 import globalState from "./store/globalState";
 import { useEffect, useState } from "react";
+import Perfil from "./pages/Perfil";
+import TermoCompromisso from "./components/TermoCompromisso";
 
 function App() {
   return (
@@ -40,7 +42,10 @@ function AppContent() {
         if (data.success) {
           localStorage.setItem("user", JSON.stringify(data.user));
           globalState.user = { ...data.user };
-          navigate("/home");
+
+          if (window.location.pathname == "/") {
+            navigate("/home");
+          }
         }
       } catch (error) {
         console.error("Error login:", error);
@@ -62,6 +67,8 @@ function AppContent() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Perfil />} />
+          <Route path="/termos" element={<TermoCompromisso />} />
         </Routes>
       )}
     </>

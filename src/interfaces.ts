@@ -87,3 +87,17 @@ export interface iActiveFaltaResponse {
     success: boolean,
     msg: string
 }
+
+export interface iEditUserParam {
+    id_user: string,
+    name: string,
+    user: string,
+    alterarSenha: boolean,
+    senha: string,
+    newSenha: string
+}
+
+export interface iEditUserResponse {
+    success: boolean,
+    msg: string
+}
