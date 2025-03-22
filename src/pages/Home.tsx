@@ -19,6 +19,7 @@ import CardMateria from "../components/CardMateria";
 import backgroundHome from "../assets/9c1946a1386fcd9aa8a7c1c6f3169b1f.jpg";
 import service from "../services/faltaket.service";
 import {
+  iActiveFaltaParam,
   iEditMateriaParam,
   iFalta,
   iMaterias,
@@ -219,6 +220,37 @@ function Home() {
         setLoading(false);
       }
     },
+
+    async activeFalta(falta: iActiveFaltaParam) {
+      try {
+        setLoading(true);
+        const data = await service.activeFalta(falta);
+
+        if (data.success) {
+          setMateria((prevMaterias) => {
+            const updatedMaterias = prevMaterias.map((materia) => {
+              if (materia.id == falta.id_materia) {
+                const updatedFaltas = materia.faltas.map((f) => {
+                  if (f.indice === falta.indice) {
+                    return { ...f, active: !f.active };
+                  }
+                  return f;
+                });
+                return { ...materia, faltas: updatedFaltas };
+              }
+
+              return materia;
+            });
+
+            return updatedMaterias;
+          });
+        }
+      } catch (error) {
+        console.error("Error activeFalta:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
   };
 
   return (
@@ -306,6 +338,7 @@ function Home() {
               materia={item}
               deleteMateria={actions.deleteMateria}
               editMateria={actions.handleOpenDialogEdit}
+              onActive={actions.activeFalta}
             />
           ))}
         </div>

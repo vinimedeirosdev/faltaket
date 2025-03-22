@@ -76,3 +76,14 @@ export interface iEditMateriaParam {
     faltas: number,
     faltas_active: number
 }
+
+export interface iActiveFaltaParam {
+    id_materia: string,
+    indice: number,
+    active: boolean
+}
+
+export interface iActiveFaltaResponse {
+    success: boolean,
+    msg: string
+}

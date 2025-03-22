@@ -14,6 +14,11 @@ interface Props {
   materia: iMaterias;
   deleteMateria: (id_materia: string) => void;
   editMateria: (id_materia: string) => void;
+  onActive: (falta: {
+    id_materia: string;
+    active: boolean;
+    indice: number;
+  }) => void;
 }
 
 function CardMateria(props: Props) {
@@ -60,6 +65,12 @@ function CardMateria(props: Props) {
           falta.indice == indice ? { ...falta, active: !falta.active } : falta
         )
       );
+
+      props.onActive({
+        id_materia: props.materia.id,
+        active: !faltas[indice - 1].active,
+        indice: indice,
+      });
     },
 
     getCardColor() {

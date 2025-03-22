@@ -1,5 +1,7 @@
 import axios from "axios"
 import {
+    iActiveFaltaParam,
+    iActiveFaltaResponse,
     iAddMateriaParam, iAddMateriaResponse, iDeleteMateriaResponse, iEditMateriaParam, iEditMateriaResponse,
     iGetMateriasResponse, iLoginResponse, iRegisterParam, iRegisterResponse
 } from "../interfaces";
@@ -14,6 +16,7 @@ type iGetMateriasFunction = (id_user: string) => Promise<iGetMateriasResponse[]>
 type iAddMateriaFunction = (param: iAddMateriaParam) => Promise<iAddMateriaResponse>
 type iDeleteMateriaFunction = (id_materia: string) => Promise<iDeleteMateriaResponse>
 type iEditMateriaFunction = (param: iEditMateriaParam) => Promise<iEditMateriaResponse>
+type iActiveFaltaFunction = (param: iActiveFaltaParam) => Promise<iActiveFaltaResponse>
 
 const login: iLoginFunction = async (user, password) => {
     const { data } = await axios.post(baseURL + "/login", {
@@ -63,11 +66,20 @@ const editMateria: iEditMateriaFunction = async (param) => {
     return data
 }
 
+const activeFalta: iActiveFaltaFunction = async (param) => {
+    const { data } = await axios.post(baseURL + "/activeFalta", {
+        ...param
+    })
+
+    return data
+}
+
 export default {
     register,
     login,
     getMaterias,
     addMateria,
     deleteMateria,
-    editMateria
+    editMateria,
+    activeFalta
 }
