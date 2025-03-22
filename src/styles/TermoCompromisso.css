@@ -107,9 +107,14 @@
 }
 
 .letter-content {
-    font-size: 16px;
-    line-height: 1.8;
+    font-size: 24px;
+    text-align: justify;
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold;
+    line-height: 1.5;
     color: #444;
+    overflow: auto;
+    max-height: 700px;
 }
 
 .letter-content p {
@@ -120,7 +125,7 @@
     display: block;
     margin: 30px auto 0;
     padding: 12px 24px;
-    background-color: #2ecc71;
+    background-color: #b2dcf9; /* Cor azul suave */
     color: white;
     border: none;
     border-radius: 5px;
@@ -129,7 +134,51 @@
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.accept-button:hover {
-    background-color: #27ae60;
-    transform: scale(1.05);
-}
+
+
+/* Adicione isso ao seu arquivo CSS existente */
+
+.hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  
+  .heart {
+    position: absolute;
+    bottom: -10%;
+    font-size: 24px;
+    animation: float-up linear forwards;
+    opacity: 0.9;
+    transform: scale(0.8);
+  }
+  
+  @keyframes float-up {
+    0% {
+      bottom: -10%;
+      opacity: 0.9;
+      transform: scale(0.8) rotate(0deg);
+    }
+    25% {
+      opacity: 1;
+      transform: scale(1) rotate(10deg);
+    }
+    50% {
+      transform: scale(1.2) rotate(-5deg);
+    }
+    75% {
+      opacity: 0.8;
+      transform: scale(1) rotate(10deg);
+    }
+    100% {
+      bottom: 100%;
+      opacity: 0;
+      transform: scale(0.8) rotate(-5deg);
+    }
+  }
+  

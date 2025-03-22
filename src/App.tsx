@@ -10,6 +10,8 @@ import globalState from "./store/globalState";
 import { useEffect, useState } from "react";
 import Perfil from "./pages/Perfil";
 import TermoCompromisso from "./components/TermoCompromisso";
+//@ts-ignore
+import "typeface-dancing-script";
 
 function App() {
   return (
