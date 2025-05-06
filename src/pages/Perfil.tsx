@@ -102,7 +102,6 @@ function Perfil() {
           setEditing(false);
 
           globalState.user.name = name;
-          globalState.user.user = user;
 
           if (alterarSenhaCheck) {
             globalState.user.password = newPassword;
@@ -112,6 +111,8 @@ function Perfil() {
 
           setUserOld(globalState.user);
           actions.handleClickCancel();
+
+          toast.success(data.msg);
         } else {
           toast.error(data.msg);
         }
@@ -171,7 +172,7 @@ function Perfil() {
           variant="outlined"
           fullWidth
           InputProps={{
-            readOnly: !editing,
+            readOnly: true,
           }}
           value={user}
           onChange={(e) => setUser(e.target.value)}
