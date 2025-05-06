@@ -7,7 +7,12 @@ export interface iRegisterParam {
 export interface iRegisterResponse {
     success: boolean,
     msg: string,
-    id: string
+    user: {
+        id: string,
+        name: string,
+        password: string,
+        user: string,
+    }
 }
 
 export interface iLoginResponse {

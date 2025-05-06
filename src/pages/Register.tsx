@@ -63,16 +63,18 @@ function Register() {
               name: name,
               user: user,
               password: password,
-              id: data.id,
+              id: data.user.id,
             })
           );
 
           globalState.user = {
             name: name,
             user: user,
-            id: data.id,
+            id: data.user.id,
             password: password,
           };
+
+          console.log(globalState.user);
 
           navigate("/home");
         } else {
