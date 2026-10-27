@@ -13,7 +13,7 @@ export function AvisoAtualizacao() {
 
   useEffect(() => {
     if (!precisaAtualizar) return
-    toast('Nova versão do Faltaket disponível ✨', {
+    toast('Nova versão do FaltaKet disponível ✨', {
       duration: Infinity,
       action: { label: 'Atualizar', onClick: () => updateServiceWorker(true) },
     })

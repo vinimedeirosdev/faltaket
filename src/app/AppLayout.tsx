@@ -1,6 +1,7 @@
 import { BookOpen, CalendarCheck, Plus, UserRound } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { MarcaIcone } from '@/components/brand'
 import { Avatar, Logo } from '@/components/ui/misc'
 import { cn } from '@/lib/utils'
 import { useUsuario } from '@/features/auth/AuthProvider'
@@ -38,7 +39,8 @@ function Shell() {
 
       <header className="pt-safe bg-background/70 sticky top-0 z-30 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <Link to="/" aria-label="Início">
+          <Link to="/" aria-label="Início" className="flex items-center gap-2.5">
+            <MarcaIcone className="size-9" />
             <Logo className="text-3xl" />
           </Link>
 

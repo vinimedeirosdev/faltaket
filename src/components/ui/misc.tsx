@@ -44,7 +44,7 @@ export function Logo({ className }: { className?: string }) {
         className,
       )}
     >
-      Faltaket
+      FaltaKet
     </span>
   )
 }

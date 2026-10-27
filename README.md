@@ -69,6 +69,7 @@ localmente com emuladores, sem tocar em produção, veja **[docs/SETUP.md](docs/
 | `npm run format`    | Prettier (com ordenação de classes Tailwind) |
 | `npm test`          | Testes unitários (Vitest)                    |
 | `npm run deploy`    | Build + deploy no Firebase Hosting           |
+| `npm run marca`     | Gera ícones e logos a partir de `branding/`  |
 
 ## Documentação
 
@@ -85,7 +86,11 @@ localmente com emuladores, sem tocar em produção, veja **[docs/SETUP.md](docs/
 ## Estrutura
 
 ```
+branding/          # logo original (fonte, não vai para o site) — ver branding/README.md
+scripts/           # gerar-marca.mjs: gera ícones/logos otimizados a partir de branding/
+public/            # ícones do PWA e favicon (gerados)
 src/
+├─ assets/brand/   # logo e ícone otimizados (gerados), usados via components/brand.tsx
 ├─ app/            # router, layout (header, bottom nav, FAB), tema
 ├─ features/
 │  ├─ auth/        # login, cadastro, AuthProvider, API do Auth, schemas
@@ -93,7 +98,9 @@ src/
 │  ├─ perfil/
 │  ├─ pwa/         # instalar app + aviso de atualização
 │  └─ termo/
-├─ components/ui/  # botões, inputs, modal responsivo, menu, confirmação
+├─ components/
+│  ├─ brand.tsx    # LogoCompleta, MarcaIcone
+│  └─ ui/          # botões, inputs, modal responsivo, menu, confirmação
 ├─ lib/            # firebase, env (validado com Zod), username → e-mail, utils
 └─ styles/         # tokens de tema (claro/escuro)
 ```

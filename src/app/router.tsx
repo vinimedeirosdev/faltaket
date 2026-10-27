@@ -1,6 +1,6 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router'
-import { Logo } from '@/components/ui/misc'
+import { LogoCompleta } from '@/components/brand'
 import { useAuth, useUsuario } from '@/features/auth/AuthProvider'
 import { CadastroPage } from '@/features/auth/CadastroPage'
 import { LoginPage } from '@/features/auth/LoginPage'
@@ -17,7 +17,7 @@ const TermoPage = lazy(() =>
 function Splash() {
   return (
     <div className="grid min-h-dvh place-items-center">
-      <Logo className="animate-pulse text-6xl" />
+      <LogoCompleta className="w-44 animate-pulse" />
     </div>
   )
 }

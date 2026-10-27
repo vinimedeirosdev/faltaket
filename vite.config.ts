@@ -18,14 +18,14 @@ export default defineConfig({
     VitePWA({
       // "prompt": o app avisa que existe versão nova e o usuário escolhe quando atualizar
       registerType: 'prompt',
-      includeAssets: ['favicon.svg', 'apple-touch-icon-180x180.png'],
+      includeAssets: ['favicon.ico', 'favicon-48x48.png', 'apple-touch-icon-180x180.png'],
       manifest: {
-        name: 'Faltaket',
-        short_name: 'Faltaket',
+        name: 'FaltaKet',
+        short_name: 'FaltaKet',
         description: 'Controle suas faltas da faculdade sem susto.',
         lang: 'pt-BR',
         theme_color: '#8b5cf6',
-        background_color: '#faf7ff',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

@@ -2,6 +2,8 @@
 
 ## 2.1.0
 
+- **Nova logo** (estudante + calendário): aparece no login, no cadastro, na tela de carregamento, no topo do app, no ícone do app instalado e na aba do navegador. O nome passa a ser escrito **FaltaKet**.
+- Logo original em `branding/`; `npm run marca` gera todas as versões otimizadas (WebP para o app, PNG/ICO para PWA e favicon).
 - **Foto de perfil**: no Perfil, toque no avatar para escolher uma foto (câmera ou galeria), ver a prévia, salvar ou remover. A foto aparece também no topo do app.
 - A imagem é recortada no centro, reduzida para 256×256 e comprimida em WebP (~10–30 KB) no próprio navegador, e fica salva no perfil do Firestore. Não usa Firebase Storage, então continua no plano gratuito.
 - Security Rules: o dono pode alterar ou remover o campo `foto` (só imagem WebP/JPEG em data URL, até 150 mil caracteres).
@@ -44,6 +46,6 @@ Reescrita completa: visual, arquitetura e segurança.
 - Axios + estado global mutável → providers React com `onSnapshot`
 - Formulários com React Hook Form + Zod; variáveis de ambiente validadas
 - Vite 8, React 19, TypeScript strict, ESLint, Prettier, Vitest
-- Ícones do PWA gerados a partir de um SVG (`npx pwa-assets-generator`)
+- Ícones do PWA gerados por script (substituídos pela logo oficial na 2.1.0)
 - Removidos: `better-sqlite3`, `workbox-webpack-plugin`, `axios`, `react-toastify`, imagens de fundo de 300 KB
 - Rotas antigas (`/home`, `/profile`, `/register`, `/termos`) redirecionam para as novas

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import type { ReactNode } from 'react'
-import { Logo } from '@/components/ui/misc'
+import { LogoCompleta } from '@/components/brand'
 
 export function AuthLayout({
   titulo,
@@ -24,9 +24,8 @@ export function AuthLayout({
         transition={{ type: 'spring', stiffness: 140, damping: 20 }}
         className="w-full max-w-sm"
       >
-        <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <img src="/favicon.svg" alt="" className="size-16 drop-shadow-lg" />
-          <Logo className="text-6xl" />
+        <div className="mb-6 flex flex-col items-center gap-4 text-center">
+          <LogoCompleta className="w-44 sm:w-52" />
           <div>
             <h1 className="text-xl font-semibold">{titulo}</h1>
             <p className="text-muted-foreground text-sm">{subtitulo}</p>

@@ -104,7 +104,7 @@ export function PerfilPage() {
         <Grupo titulo="App">
           {pwa.podeInstalar ? (
             <Item icone={<Download />} onClick={pwa.instalar}>
-              Instalar o Faltaket no celular
+              Instalar o FaltaKet no celular
             </Item>
           ) : (
             <div className="text-muted-foreground flex items-start gap-3 p-4 text-sm">
@@ -128,7 +128,7 @@ export function PerfilPage() {
       </Grupo>
 
       <p className="text-muted-foreground text-center text-xs">
-        Faltaket v{__APP_VERSION__} · feito com 💜
+        FaltaKet v{__APP_VERSION__} · feito com 💜
       </p>
 
       <Modal open={modal === 'nome'} onOpenChange={(o) => !o && fechar()} titulo="Alterar nome">
