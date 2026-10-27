@@ -22,7 +22,7 @@ import { useTema, type Tema } from '@/app/ThemeProvider'
 import { Button } from '@/components/ui/button'
 import { Confirm } from '@/components/ui/confirm'
 import { Field, Input, PasswordInput } from '@/components/ui/input'
-import { Avatar } from '@/components/ui/misc'
+import { FotoPerfil } from './FotoPerfil'
 import { Modal } from '@/components/ui/modal'
 import { cn } from '@/lib/utils'
 import { atualizarNome, excluirConta, mensagemDeErro, sair, trocarSenha } from '../auth/api'
@@ -31,7 +31,7 @@ import { trocarSenhaSchema, type TrocarSenhaDados } from '../auth/schemas'
 import { useInstalarApp } from '../pwa/pwa'
 
 export function PerfilPage() {
-  const { nome, username, termo } = useUsuario()
+  const { nome, username, foto, termo } = useUsuario()
   const { tema, setTema } = useTema()
   const pwa = useInstalarApp()
   const [modal, setModal] = useState<'nome' | 'senha' | 'excluir' | null>(null)
@@ -52,7 +52,7 @@ export function PerfilPage() {
   return (
     <div className="mx-auto grid max-w-lg gap-6 pt-4">
       <section className="flex flex-col items-center gap-3 text-center">
-        <Avatar nome={nome} className="size-24 text-3xl" />
+        <FotoPerfil nome={nome} foto={foto} />
         <div>
           <h1 className="text-2xl font-bold">{nome}</h1>
           <p className="text-muted-foreground text-sm">@{username}</p>

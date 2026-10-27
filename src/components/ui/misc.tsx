@@ -5,7 +5,24 @@ export function Skeleton({ className, ...props }: ComponentProps<'div'>) {
   return <div className={cn('bg-muted animate-pulse rounded-xl', className)} {...props} />
 }
 
-export function Avatar({ nome, className }: { nome: string; className?: string }) {
+export function Avatar({
+  nome,
+  foto,
+  className,
+}: {
+  nome: string
+  foto?: string
+  className?: string
+}) {
+  if (foto) {
+    return (
+      <img
+        src={foto}
+        alt=""
+        className={cn('size-10 shrink-0 rounded-full object-cover shadow-sm', className)}
+      />
+    )
+  }
   return (
     <span
       aria-hidden

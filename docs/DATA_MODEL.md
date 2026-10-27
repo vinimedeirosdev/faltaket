@@ -14,12 +14,13 @@ users/{uid}
 
 `uid` é o id do Firebase Auth. Para usuários migrados, é o mesmo id da v1.
 
-| Campo       | Tipo          | Regras                                                                                    |
-| ----------- | ------------- | ----------------------------------------------------------------------------------------- |
-| `name`      | string        | 1–40 caracteres. Único campo que o cliente pode alterar depois.                           |
-| `username`  | string        | Normalizado (`trim().toLowerCase()`). Definido no cadastro.                               |
-| `createdAt` | timestamp     | Definido no cadastro.                                                                     |
-| `features`  | map, opcional | `{ termo: boolean }`. **Só o Admin SDK grava**; o cliente não consegue criar nem alterar. |
+| Campo       | Tipo             | Regras                                                                                                                                                                          |
+| ----------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`      | string           | 1–40 caracteres. Pode ser alterado pelo dono.                                                                                                                                   |
+| `username`  | string           | Normalizado (`trim().toLowerCase()`). Definido no cadastro.                                                                                                                     |
+| `createdAt` | timestamp        | Definido no cadastro.                                                                                                                                                           |
+| `features`  | map, opcional    | `{ termo: boolean }`. **Só o Admin SDK grava**; o cliente não consegue criar nem alterar.                                                                                       |
+| `foto`      | string, opcional | Foto de perfil como data URL `data:image/webp;base64,...` (ou jpeg), 256×256, até 150 mil caracteres. Gerada no navegador por `src/lib/imagem.ts`. Dono pode trocar ou remover. |
 
 ## `users/{uid}/materias/{materiaId}`
 
@@ -47,7 +48,7 @@ users/{uid}
 | ------------------------------------------ | ------------------------------------------------------------------ |
 | Ler / apagar `users/{uid}` e suas matérias | `request.auth.uid == uid`                                          |
 | Criar `users/{uid}`                        | dono **e** só `name`, `username`, `createdAt` (nada de `features`) |
-| Alterar `users/{uid}`                      | dono **e** só o campo `name` muda                                  |
+| Alterar `users/{uid}`                      | dono **e** só `name` e `foto` mudam                                |
 | Criar / alterar matéria                    | dono **e** todos os campos presentes e válidos                     |
 | Qualquer outro caminho                     | negado                                                             |
 

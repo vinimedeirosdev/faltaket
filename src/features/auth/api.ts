@@ -9,7 +9,15 @@ import {
   updatePassword,
   updateProfile,
 } from 'firebase/auth'
-import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import {
+  deleteDoc,
+  deleteField,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore'
 import { env } from '@/lib/env'
 import { auth, db } from '@/lib/firebase'
 import { normalizeUsername, usernameToEmail } from '@/lib/username'
@@ -18,6 +26,8 @@ import { excluirTodasMaterias } from '../materias/api'
 export interface Perfil {
   name: string
   username: string
+  /** data URL (WebP/JPEG 256×256), gerada por prepararFotoPerfil */
+  foto?: string
   features?: { termo?: boolean }
 }
 
@@ -56,6 +66,12 @@ export async function atualizarNome(nome: string) {
     updateProfile(user, { displayName: nome }),
     updateDoc(perfilRef(user.uid), { name: nome }),
   ])
+}
+
+/** Salva (ou remove, com null) a foto. Não aguarde: offline só resolve quando sincronizar. */
+export function atualizarFoto(foto: string | null) {
+  const user = requireUser()
+  return updateDoc(perfilRef(user.uid), { foto: foto ?? deleteField() })
 }
 
 async function reautenticar(senhaAtual: string) {

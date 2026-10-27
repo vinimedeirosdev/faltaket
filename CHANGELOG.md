@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0
+
+- **Foto de perfil**: no Perfil, toque no avatar para escolher uma foto (câmera ou galeria), ver a prévia, salvar ou remover. A foto aparece também no topo do app.
+- A imagem é recortada no centro, reduzida para 256×256 e comprimida em WebP (~10–30 KB) no próprio navegador, e fica salva no perfil do Firestore. Não usa Firebase Storage, então continua no plano gratuito.
+- Security Rules: o dono pode alterar ou remover o campo `foto` (só imagem WebP/JPEG em data URL, até 150 mil caracteres).
+
 ## 2.0.0
 
 Reescrita completa: visual, arquitetura e segurança.

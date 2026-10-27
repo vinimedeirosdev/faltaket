@@ -24,7 +24,7 @@ export function AppLayout() {
 }
 
 function Shell() {
-  const { nome } = useUsuario()
+  const { nome, foto } = useUsuario()
   const modais = useMateriaModais()
   const { pathname } = useLocation()
 
@@ -65,7 +65,7 @@ function Shell() {
           </nav>
 
           <Link to="/perfil" aria-label="Perfil" className="sm:hidden">
-            <Avatar nome={nome} className="size-9" />
+            <Avatar nome={nome} foto={foto} className="size-9" />
           </Link>
         </div>
       </header>

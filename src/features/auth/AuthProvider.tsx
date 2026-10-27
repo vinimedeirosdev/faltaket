@@ -58,6 +58,7 @@ export function useUsuario() {
     uid: user.uid,
     nome: perfil?.name ?? user.displayName ?? '',
     username: perfil?.username ?? '',
+    foto: perfil?.foto,
     termo: perfil?.features?.termo === true,
   }
 }
