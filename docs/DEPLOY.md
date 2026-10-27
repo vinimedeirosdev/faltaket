@@ -79,6 +79,9 @@ jobs:
 - [ ] Offline: DevTools → Network → _Offline_ → marcar falta → voltar online → conferir no Console do Firestore
 - [ ] Tema escuro (Perfil → Aparência)
 - [ ] Instalar o PWA (Android/Chrome: botão no Perfil; iPhone: Compartilhar → Tela de Início)
+- [ ] Matéria: aula dupla (Faltei hoje pergunta 1 ou 2), justificar falta, aba Notas com "quanto preciso"
+- [ ] Agenda: criar prova, concluir e desfazer; exportar `.ics` no Perfil
+- [ ] Lembretes (com `VITE_FIREBASE_VAPID_KEY`): ligar no Perfil e disparar o workflow manualmente
 - [ ] Usuário com `features.termo` vê a página especial; os outros não
 
 ## Migrando da v1 (uma vez só)

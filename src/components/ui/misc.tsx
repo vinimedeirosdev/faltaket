@@ -27,7 +27,7 @@ export function Avatar({
     <span
       aria-hidden
       className={cn(
-        'grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-400 to-pink-400 text-sm font-bold text-white shadow-sm',
+        'grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-pink-400 to-rose-500 text-sm font-bold text-white shadow-sm',
         className,
       )}
     >
@@ -40,12 +40,21 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'font-hand bg-gradient-to-r from-violet-500 to-pink-500 bg-clip-text text-4xl leading-none font-bold text-transparent',
+        'font-hand bg-gradient-to-r from-pink-600 to-rose-400 bg-clip-text pr-1.5 text-4xl leading-none font-bold text-transparent',
         className,
       )}
     >
       FaltaKet
     </span>
+  )
+}
+
+export function SecaoTitulo({ children, icone }: { children: ReactNode; icone?: ReactNode }) {
+  return (
+    <h2 className="text-muted-foreground mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide uppercase">
+      {icone}
+      {children}
+    </h2>
   )
 }
 

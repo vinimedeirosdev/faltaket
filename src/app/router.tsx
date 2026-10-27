@@ -2,9 +2,11 @@ import { lazy, Suspense, type ReactNode } from 'react'
 import { createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router'
 import { LogoCompleta } from '@/components/brand'
 import { useAuth, useUsuario } from '@/features/auth/AuthProvider'
+import { AgendaPage } from '@/features/agenda/AgendaPage'
 import { CadastroPage } from '@/features/auth/CadastroPage'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { HojePage } from '@/features/materias/HojePage'
+import { MateriaPage } from '@/features/materias/MateriaPage'
 import { MateriasPage } from '@/features/materias/MateriasPage'
 import { PerfilPage } from '@/features/perfil/PerfilPage'
 import { AppLayout } from './AppLayout'
@@ -67,6 +69,8 @@ export const router = createBrowserRouter([
         children: [
           { path: '/', element: <HojePage /> },
           { path: '/materias', element: <MateriasPage /> },
+          { path: '/materias/:id', element: <MateriaPage /> },
+          { path: '/agenda', element: <AgendaPage /> },
           { path: '/perfil', element: <PerfilPage /> },
         ],
       },

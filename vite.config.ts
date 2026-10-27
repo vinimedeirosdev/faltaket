@@ -24,7 +24,7 @@ export default defineConfig({
         short_name: 'FaltaKet',
         description: 'Controle suas faltas da faculdade sem susto.',
         lang: 'pt-BR',
-        theme_color: '#8b5cf6',
+        theme_color: '#db2777',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
@@ -41,9 +41,12 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-        navigateFallback: '/index.html',
+      // service worker próprio (src/sw.ts): cache offline + lembretes do Firebase Cloud Messaging
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
       },
     }),
   ],

@@ -22,6 +22,8 @@ import { useTema, type Tema } from '@/app/ThemeProvider'
 import { Button } from '@/components/ui/button'
 import { Confirm } from '@/components/ui/confirm'
 import { Field, Input, PasswordInput } from '@/components/ui/input'
+import { Lembretes } from '../notificacoes/Lembretes'
+import { Faculdade } from './Faculdade'
 import { FotoPerfil } from './FotoPerfil'
 import { Modal } from '@/components/ui/modal'
 import { cn } from '@/lib/utils'
@@ -50,7 +52,7 @@ export function PerfilPage() {
   }
 
   return (
-    <div className="mx-auto grid max-w-lg gap-6 pt-4">
+    <div className="mx-auto grid max-w-lg grid-cols-1 gap-6 pt-4">
       <section className="flex flex-col items-center gap-3 text-center">
         <FotoPerfil nome={nome} foto={foto} />
         <div>
@@ -71,6 +73,14 @@ export function PerfilPage() {
             Termo de Compromisso
           </Item>
         )}
+      </Grupo>
+
+      <Grupo titulo="Faculdade">
+        <Faculdade />
+      </Grupo>
+
+      <Grupo titulo="Lembretes">
+        <Lembretes />
       </Grupo>
 
       <Grupo titulo="Aparência">

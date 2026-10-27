@@ -7,27 +7,114 @@ export interface Falta {
   /** null = falta migrada da v1, sem data conhecida */
   data: Timestamp | null
   obs?: string
+  /** 2 = faltou numa aula dupla (conta 2). Ausente = 1. */
+  aulas?: 1 | 2
+  /** atestado/abono: aparece no histórico mas não conta no limite */
+  justificada?: boolean
+}
+
+export interface Horario {
+  dia: DiaSemana
+  /** "HH:MM" */
+  inicio?: string
+  fim?: string
+  sala?: string
+  /** 2 = aula dupla */
+  aulas: 1 | 2
+}
+
+export interface Professor {
+  nome: string
+  email?: string
+}
+
+export interface Nota {
+  id: string
+  nome: string
+  peso: number
+  /** null = ainda não saiu */
+  valor: number | null
 }
 
 export interface Materia {
   id: string
   nome: string
-  diaSemana: DiaSemana
+  /** formato da v2.0: substituído por `horarios`. Use sempre horariosDe(). */
+  diaSemana?: DiaSemana
+  horarios?: Horario[]
   maxFaltas: number
   cor: Cor
   faltas: Falta[]
+  professor?: Professor
+  notas?: Nota[]
+  /** sobrescreve a média de aprovação do perfil só nesta matéria */
+  mediaAprovacao?: number
   createdAt?: Timestamp
   updatedAt?: Timestamp
 }
 
-export type MateriaInput = Pick<Materia, 'nome' | 'diaSemana' | 'maxFaltas' | 'cor'>
+/** Dados editáveis no formulário (as faltas e as notas têm telas próprias). */
+export interface MateriaInput {
+  nome: string
+  horarios: Horario[]
+  maxFaltas: number
+  cor: Cor
+  professor: Professor | null
+}
 
 export const LIMITES = {
   nome: 40,
   obs: 140,
   maxFaltas: 99,
   faltasRegistradas: 200,
+  horarios: 14,
+  sala: 30,
+  professor: 60,
+  email: 100,
+  notas: 30,
+  notaNome: 20,
 } as const
+
+// ── Horários ─────────────────────────────────────────────────────────────
+
+/** Horários da matéria, inclusive das criadas na v2.0 (só com `diaSemana`). */
+export function horariosDe(m: Pick<Materia, 'horarios' | 'diaSemana'>): Horario[] {
+  if (m.horarios?.length) return m.horarios
+  return m.diaSemana ? [{ dia: m.diaSemana, aulas: 1 }] : []
+}
+
+/** Dias (sem repetição, em ordem) em que a matéria tem aula. */
+export function diasDe(m: Pick<Materia, 'horarios' | 'diaSemana'>): DiaSemana[] {
+  return [...new Set(horariosDe(m).map((h) => h.dia))].sort((a, b) => a - b)
+}
+
+/** Horários da matéria num dia específico, ordenados pelo início. */
+export function horariosNoDia(m: Pick<Materia, 'horarios' | 'diaSemana'>, dia: DiaSemana) {
+  return horariosDe(m)
+    .filter((h) => h.dia === dia)
+    .sort((a, b) => (a.inicio ?? '99').localeCompare(b.inicio ?? '99'))
+}
+
+/** "19:00–20:40 · sala 204 · aula dupla" (partes vazias somem). */
+export function descreverHorario(h: Horario) {
+  const hora = h.inicio ? (h.fim ? `${h.inicio}–${h.fim}` : h.inicio) : ''
+  return [hora, h.sala && `sala ${h.sala}`, h.aulas === 2 && 'aula dupla']
+    .filter(Boolean)
+    .join(' · ')
+}
+
+/** "HH:MM" → minutos desde 00:00 */
+export function minutos(hhmm: string) {
+  const [h, m] = hhmm.split(':').map(Number)
+  return h * 60 + m
+}
+
+// ── Faltas ───────────────────────────────────────────────────────────────
+
+/** Quantas faltas contam para o limite: aula dupla vale 2, justificada vale 0. */
+export function faltasContadas(faltas: Falta[]) {
+  return faltas.reduce((s, f) => s + (f.justificada ? 0 : (f.aulas ?? 1)), 0)
+}
 
 // ── Dias da semana (1 = segunda ... 7 = domingo, igual à v1) ──────────────
 
@@ -154,13 +241,45 @@ export const STATUS_CLASSES: Record<
   estourou: { text: 'text-danger', bg: 'bg-danger/15', stroke: 'stroke-danger', label: 'Estourou' },
 }
 
-export function emRisco(m: Pick<Materia, 'faltas' | 'maxFaltas'>) {
-  return calcularStatus(m.faltas.length, m.maxFaltas).tipo !== 'ok'
+/** Status da matéria considerando aula dupla e faltas justificadas. */
+export function statusDa(m: Pick<Materia, 'faltas' | 'maxFaltas'>) {
+  return calcularStatus(faltasContadas(m.faltas), m.maxFaltas)
 }
 
-/** Ordena por dia da semana e depois por nome. */
+export function emRisco(m: Pick<Materia, 'faltas' | 'maxFaltas'>) {
+  return statusDa(m).tipo !== 'ok'
+}
+
+/** Ordena pelo primeiro dia de aula, depois horário e nome. */
 export function ordenarMaterias(materias: Materia[]) {
+  const chave = (m: Materia) => {
+    const h = [...horariosDe(m)].sort(
+      (a, b) => a.dia - b.dia || (a.inicio ?? '').localeCompare(b.inicio ?? ''),
+    )[0]
+    return h ? `${h.dia}${h.inicio ?? '99:99'}` : '9'
+  }
   return [...materias].sort(
-    (a, b) => a.diaSemana - b.diaSemana || a.nome.localeCompare(b.nome, 'pt-BR'),
+    (a, b) => chave(a).localeCompare(chave(b)) || a.nome.localeCompare(b.nome, 'pt-BR'),
   )
+}
+
+/**
+ * Aula acontecendo agora ou a próxima de hoje (só horários com início definido).
+ * Fim desconhecido = considera 50 minutos.
+ */
+export function aulaAgoraOuProxima(materias: Materia[], agora: Date) {
+  const dia = diaSemanaDe(agora)
+  const atual = agora.getHours() * 60 + agora.getMinutes()
+  const doDia = materias
+    .flatMap((m) => horariosNoDia(m, dia).map((h) => ({ materia: m, horario: h })))
+    .filter((x) => x.horario.inicio)
+    .sort((a, b) => minutos(a.horario.inicio!) - minutos(b.horario.inicio!))
+
+  for (const x of doDia) {
+    const ini = minutos(x.horario.inicio!)
+    const fim = x.horario.fim ? minutos(x.horario.fim) : ini + 50
+    if (atual >= ini && atual < fim) return { ...x, quando: 'agora' as const }
+    if (atual < ini) return { ...x, quando: 'proxima' as const }
+  }
+  return null
 }

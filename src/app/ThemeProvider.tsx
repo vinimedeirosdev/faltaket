@@ -23,7 +23,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', escuro)
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
-      m.setAttribute('content', escuro ? '#120d1f' : '#faf7ff')
+      m.setAttribute('content', escuro ? '#1c1117' : '#fdf7fa')
     })
   }, [escuro])
 

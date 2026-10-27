@@ -29,3 +29,10 @@ export function iniciais(nome: string) {
 export function primeiroNome(nome: string) {
   return nome.trim().split(/\s+/)[0] ?? ''
 }
+
+/** Data de hoje no fuso local, no formato "AAAA-MM-DD" (para <input type="date">). */
+export function hojeISO() {
+  const d = new Date()
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset())
+  return d.toISOString().slice(0, 10)
+}

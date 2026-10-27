@@ -14,8 +14,8 @@ export function AuthLayout({
   return (
     <div className="pt-safe pb-safe relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 py-10">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 -left-24 size-80 rounded-full bg-violet-400/35 blur-3xl dark:bg-violet-600/25" />
-        <div className="absolute -right-24 -bottom-32 size-80 rounded-full bg-pink-300/40 blur-3xl dark:bg-pink-500/15" />
+        <div className="absolute -top-32 -left-24 size-80 rounded-full bg-pink-300/40 blur-3xl dark:bg-pink-600/25" />
+        <div className="absolute -right-24 -bottom-32 size-80 rounded-full bg-rose-200/50 blur-3xl dark:bg-rose-500/15" />
       </div>
 
       <motion.div
@@ -32,7 +32,7 @@ export function AuthLayout({
           </div>
         </div>
 
-        <div className="bg-card/80 rounded-3xl border p-6 shadow-xl shadow-violet-500/5 backdrop-blur">
+        <div className="bg-card/80 rounded-3xl border p-6 shadow-xl shadow-pink-500/5 backdrop-blur">
           {children}
         </div>
       </motion.div>

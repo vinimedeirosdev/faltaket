@@ -21,15 +21,34 @@ import {
 import { env } from '@/lib/env'
 import { auth, db } from '@/lib/firebase'
 import { normalizeUsername, usernameToEmail } from '@/lib/username'
+import { excluirTodosEventos } from '../agenda/api'
 import { excluirTodasMaterias } from '../materias/api'
+import { excluirTodosDispositivos } from '../notificacoes/push'
 
 export interface Perfil {
   name: string
   username: string
   /** data URL (WebP/JPEG 256×256), gerada por prepararFotoPerfil */
   foto?: string
+  config?: Config
   features?: { termo?: boolean }
 }
+
+/** Preferências da faculdade e dos lembretes (todas opcionais; ver CONFIG_PADRAO). */
+export interface Config {
+  mediaAprovacao?: number
+  /** abaixo da média mas >= este valor = exame/recuperação; ausente = não tem exame */
+  mediaExame?: number
+  /** datas do semestre "AAAA-MM-DD" (usadas ao exportar a agenda) */
+  semestreInicio?: string
+  semestreFim?: string
+  notificacoes?: { aulas?: boolean; provas?: boolean; entregas?: boolean; risco?: boolean }
+}
+
+export const CONFIG_PADRAO = {
+  mediaAprovacao: 7,
+  notificacoes: { aulas: true, provas: true, entregas: true, risco: true },
+} as const
 
 const toEmail = (username: string) => usernameToEmail(username, env.VITE_AUTH_EMAIL_DOMAIN)
 const perfilRef = (uid: string) => doc(db, 'users', uid)
@@ -74,6 +93,18 @@ export function atualizarFoto(foto: string | null) {
   return updateDoc(perfilRef(user.uid), { foto: foto ?? deleteField() })
 }
 
+/**
+ * Atualiza campos da config sem apagar os outros ("config.x" no Firestore).
+ * null remove o campo. Não aguarde: offline só resolve quando sincronizar.
+ */
+export function atualizarConfig(campos: { [K in keyof Config]?: Config[K] | null }) {
+  const user = requireUser()
+  const dados = Object.fromEntries(
+    Object.entries(campos).map(([k, v]) => ['config.' + k, v ?? deleteField()]),
+  )
+  return updateDoc(perfilRef(user.uid), dados)
+}
+
 async function reautenticar(senhaAtual: string) {
   const user = requireUser()
   await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email!, senhaAtual))
@@ -88,6 +119,8 @@ export async function trocarSenha(senhaAtual: string, novaSenha: string) {
 export async function excluirConta(senhaAtual: string) {
   const user = await reautenticar(senhaAtual)
   await excluirTodasMaterias(user.uid)
+  await excluirTodosEventos(user.uid)
+  await excluirTodosDispositivos(user.uid)
   await deleteDoc(perfilRef(user.uid))
   await deleteUser(user)
 }

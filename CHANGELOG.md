@@ -1,5 +1,39 @@
 # Changelog
 
+## 3.0.0
+
+Mais do que faltas: tudo que a faculdade pede, num lugar só.
+
+### Novidades
+
+- **Grade horária**: cada matéria pode ter vários dias, com horário de início/fim, sala e
+  **aula dupla**. A tela Hoje ordena as aulas pelo horário e mostra "Acontecendo agora" ou "Próxima aula".
+- **Faltas mais justas**: em aula dupla o "Faltei hoje" pergunta se foram 1 ou 2 aulas;
+  falta **justificada** (atestado) aparece no histórico, mas não conta no limite.
+- **Página da matéria** (`/materias/:id`) com abas Faltas, Notas, Agenda e Info (horários,
+  sala, professor com e-mail clicável).
+- **Notas e médias**: provas e trabalhos com peso, média ponderada, **"quanto preciso tirar"**,
+  situação (aprovada / exame / reprovada), média própria por matéria e média geral do semestre.
+- **Agenda**: provas, trabalhos e entregas com data, hora, local, anotações e checklist;
+  contagem regressiva, filtros, concluir com Desfazer. Ao criar uma prova, dá para criar a avaliação nas Notas.
+  Nova aba **Agenda** na navegação; a tela Hoje mostra os próximos 7 dias.
+- **Exportar para o Google Agenda / iPhone** (`.ics`): aulas semanais até o fim do semestre + provas e entregas.
+- **Perfil → Faculdade**: média de aprovação, média de exame e datas do semestre.
+- **Lembretes no celular** (push grátis): 07h com as aulas do dia e o aviso de limite de faltas, e
+  18h com o que vence amanhã e em 3 dias. Liga e desliga por aparelho e por tipo.
+- **Logo sem fundo** (PNG transparente, também em `branding/logo-transparente.png`) e **tema rosa**
+  tirado das cores da logo, nos modos claro e escuro.
+
+### Técnico
+
+- Matérias da v2.0 (só `diaSemana`) continuam funcionando e são convertidas para `horarios` na
+  primeira edição, sem script de migração.
+- Service worker próprio (`src/sw.ts`, estratégia `injectManifest`): cache offline + Firebase Cloud Messaging.
+- Nova variável opcional `VITE_FIREBASE_VAPID_KEY` (lembretes).
+- Correção: o texto longo da "Próxima aula" alargava a página no celular (grids com `grid-cols-1`).
+- Testes: 40 no front (status com aula dupla e justificada, horários legados, "agora/próxima aula",
+  cálculo de notas, agenda, `.ics`) + 28 de Security Rules + 6 dos lembretes.
+
 ## 2.1.0
 
 - **Nova logo** (estudante + calendário): aparece no login, no cadastro, na tela de carregamento, no topo do app, no ícone do app instalado e na aba do navegador. O nome passa a ser escrito **FaltaKet**.

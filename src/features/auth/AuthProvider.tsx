@@ -1,7 +1,7 @@
 import { onAuthStateChanged, type User } from 'firebase/auth'
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { auth } from '@/lib/firebase'
-import { observarPerfil, type Perfil } from './api'
+import { CONFIG_PADRAO, observarPerfil, type Perfil } from './api'
 
 interface AuthState {
   /** true até o Firebase dizer se há sessão salva */
@@ -59,6 +59,13 @@ export function useUsuario() {
     nome: perfil?.name ?? user.displayName ?? '',
     username: perfil?.username ?? '',
     foto: perfil?.foto,
+    config: {
+      mediaAprovacao: perfil?.config?.mediaAprovacao ?? CONFIG_PADRAO.mediaAprovacao,
+      mediaExame: perfil?.config?.mediaExame,
+      semestreInicio: perfil?.config?.semestreInicio,
+      semestreFim: perfil?.config?.semestreFim,
+      notificacoes: { ...CONFIG_PADRAO.notificacoes, ...perfil?.config?.notificacoes },
+    },
     termo: perfil?.features?.termo === true,
   }
 }

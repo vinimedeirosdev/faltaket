@@ -1,14 +1,26 @@
-import { AlertTriangle, BookOpen, PartyPopper, Plus } from 'lucide-react'
+import { AlertTriangle, BookOpen, CalendarClock, Clock, PartyPopper, Plus } from 'lucide-react'
 import { AnimatePresence } from 'motion/react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { EmptyState, Skeleton } from '@/components/ui/misc'
+import { EmptyState, SecaoTitulo, Skeleton } from '@/components/ui/misc'
 import { cn, primeiroNome } from '@/lib/utils'
+import { Lista } from '../agenda/AgendaPage'
+import { useEventos } from '../agenda/EventosProvider'
+import { diasAte } from '../agenda/model'
 import { useUsuario } from '../auth/AuthProvider'
 import { MateriaCard } from './MateriaCard'
 import { useMateriaModais } from './MateriaModaisProvider'
 import { useMaterias } from './MateriasProvider'
-import { calcularStatus, diaSemanaDe } from './model'
+import {
+  aulaAgoraOuProxima,
+  descreverHorario,
+  diasDe,
+  diaSemanaDe,
+  faltasContadas,
+  horariosNoDia,
+  minutos,
+  statusDa,
+} from './model'
 
 const dataHoje = new Intl.DateTimeFormat('pt-BR', {
   weekday: 'long',
@@ -26,28 +38,59 @@ function saudacao() {
 export function HojePage() {
   const { nome } = useUsuario()
   const { materias, carregando } = useMaterias()
+  const { eventos } = useEventos()
   const modais = useMateriaModais()
 
-  const hoje = diaSemanaDe(new Date())
-  const deHoje = materias.filter((m) => m.diaSemana === hoje)
-  const emAtencao = materias.filter(
-    (m) => m.diaSemana !== hoje && calcularStatus(m.faltas.length, m.maxFaltas).tipo !== 'ok',
-  )
-  const totalFaltas = materias.reduce((s, m) => s + m.faltas.length, 0)
-  const totalRisco = materias.filter(
-    (m) => calcularStatus(m.faltas.length, m.maxFaltas).tipo !== 'ok',
-  ).length
+  const agora = new Date()
+  const hoje = diaSemanaDe(agora)
+  // aulas de hoje, na ordem do horário
+  const deHoje = materias
+    .filter((m) => diasDe(m).includes(hoje))
+    .sort((a, b) => {
+      const ia = horariosNoDia(a, hoje)[0]?.inicio
+      const ib = horariosNoDia(b, hoje)[0]?.inicio
+      return (ia ? minutos(ia) : 9999) - (ib ? minutos(ib) : 9999)
+    })
+  const emAtencao = materias.filter((m) => !diasDe(m).includes(hoje) && statusDa(m).tipo !== 'ok')
+  const totalFaltas = materias.reduce((s, m) => s + faltasContadas(m.faltas), 0)
+  const totalRisco = materias.filter((m) => statusDa(m).tipo !== 'ok').length
+  const aula = aulaAgoraOuProxima(materias, agora)
+  const semana = eventos
+    .filter((e) => !e.concluido)
+    .filter((e) => {
+      const d = diasAte(e.data.toDate(), agora)
+      return d >= 0 && d <= 7
+    })
+    .sort((a, b) => a.data.toMillis() - b.data.toMillis())
 
   return (
-    <div className="grid gap-8">
+    <div className="grid grid-cols-1 gap-8">
       <section className="pt-2">
         <p className="text-muted-foreground text-sm first-letter:uppercase">
-          {dataHoje.format(new Date())}
+          {dataHoje.format(agora)}
         </p>
         <h1 className="mt-1 text-3xl font-bold tracking-tight">
           {saudacao()}
           {nome && `, ${primeiroNome(nome)}`} 👋
         </h1>
+
+        {aula && (
+          <Link
+            to={`/materias/${aula.materia.id}`}
+            className="bg-primary text-primary-foreground shadow-primary/25 mt-5 flex items-center gap-3 rounded-2xl p-4 shadow-lg"
+          >
+            <Clock className="size-6 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold tracking-wide uppercase opacity-85">
+                {aula.quando === 'agora' ? 'Acontecendo agora' : 'Próxima aula'}
+              </p>
+              <p className="truncate font-semibold">
+                {aula.materia.nome}
+                <span className="font-normal opacity-90"> · {descreverHorario(aula.horario)}</span>
+              </p>
+            </div>
+          </Link>
+        )}
 
         {!carregando && materias.length > 0 && (
           <div className="mt-5 grid grid-cols-3 gap-2">
@@ -74,7 +117,7 @@ export function HojePage() {
         <EmptyState
           icone={<BookOpen />}
           titulo="Vamos começar?"
-          descricao="Adicione suas matérias e o limite de faltas de cada uma. O Faltaket avisa quando estiver chegando perto."
+          descricao="Adicione suas matérias e o limite de faltas de cada uma. O FaltaKet avisa quando estiver chegando perto."
         >
           <Button onClick={modais.nova} className="mt-2">
             <Plus /> Adicionar primeira matéria
@@ -91,19 +134,34 @@ export function HojePage() {
                 </span>
                 <div>
                   <p className="font-semibold">Sem aulas hoje</p>
-                  <p className="text-muted-foreground text-sm">Aproveita para descansar 💜</p>
+                  <p className="text-muted-foreground text-sm">Aproveita para descansar 💖</p>
                 </div>
               </div>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                   {deHoje.map((m) => (
-                    <MateriaCard key={m.id} materia={m} destaque />
+                    <MateriaCard key={m.id} materia={m} dia={hoje} destaque />
                   ))}
                 </AnimatePresence>
               </div>
             )}
           </section>
+
+          {semana.length > 0 && (
+            <section>
+              <SecaoTitulo icone={<CalendarClock className="size-4" />}>
+                Próximos 7 dias
+              </SecaoTitulo>
+              <Lista eventos={semana} />
+              <Link
+                to="/agenda"
+                className="text-primary mt-3 inline-block text-sm font-semibold hover:underline"
+              >
+                Ver agenda completa →
+              </Link>
+            </section>
+          )}
 
           {emAtencao.length > 0 && (
             <section>
@@ -146,20 +204,5 @@ function Resumo({
       <p className="text-2xl font-bold tabular-nums">{valor}</p>
       <p className="text-xs opacity-80">{rotulo}</p>
     </div>
-  )
-}
-
-export function SecaoTitulo({
-  children,
-  icone,
-}: {
-  children: React.ReactNode
-  icone?: React.ReactNode
-}) {
-  return (
-    <h2 className="text-muted-foreground mb-3 flex items-center gap-2 text-sm font-semibold tracking-wide uppercase">
-      {icone}
-      {children}
-    </h2>
   )
 }

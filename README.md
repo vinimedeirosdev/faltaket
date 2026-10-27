@@ -14,17 +14,34 @@ Funciona no celular como um app instalado, inclusive **offline**.
 
 ## Funcionalidades
 
-- **Tela "Hoje"**: as aulas do dia em destaque, com o botão **Faltei hoje** à mão
-- **Status por matéria** com anel de progresso: _tranquilo → atenção → no limite → estourou_
-- **"Pode faltar mais X vezes"**: o cálculo já vem feito
-- **Histórico** de cada matéria: registrar falta em outra data, com observação, e remover uma específica
-- **Desfazer** em toda ação de falta (toast com botão)
-- **Editar matéria sem perder as faltas** (na v1 elas eram apagadas)
-- **Cores** por matéria
-- **Offline-first**: marca falta sem internet e sincroniza depois
-- **PWA**: instalar no celular e aviso de "nova versão disponível"
-- **Tema escuro** automático, com opção manual
-- **Perfil**: trocar nome e senha e excluir a conta
+**Faltas**
+
+- Tela **Hoje** com as aulas do dia na ordem do horário, mais "Acontecendo agora" ou "Próxima aula"
+- Anel de progresso e status por matéria: _tranquilo → atenção → no limite → estourou_. O app já mostra "pode faltar mais X vezes".
+- **Aula dupla** conta 2; falta **justificada** (atestado) fica no histórico, mas não conta
+- **Histórico** com data, observação e Desfazer em toda ação
+
+**Grade e matérias**
+
+- Vários dias por matéria, com horário, sala e professor; página da matéria com abas
+- Cores por matéria e calculadora do limite (25% das aulas)
+
+**Notas**
+
+- Avaliações com peso, média ponderada, **"quanto preciso tirar"**, situação (aprovada / exame / reprovada) e média geral
+
+**Agenda**
+
+- Provas, trabalhos e entregas com checklist e contagem regressiva
+- Exportação para o **Google Agenda / iPhone** (arquivo `.ics`)
+
+**Lembretes**
+
+- Push grátis às 07h (aulas do dia e limite de faltas) e às 18h (o que vence amanhã)
+
+**App**
+
+- Offline-first, PWA instalável, tema claro e escuro, foto de perfil
 - 💌 Uma página especial, liberada por usuário
 
 ## Stack
