@@ -98,7 +98,7 @@ localmente com emuladores, sem tocar em produção, veja **[docs/SETUP.md](docs/
 | [docs/DEPLOY.md](docs/DEPLOY.md)                                                                    | Publicar no Firebase Hosting (manual e via GitHub Actions)     |
 | [docs/ROADMAP.md](docs/ROADMAP.md)                                                                  | Próximas ideias                                                |
 | [CHANGELOG.md](CHANGELOG.md)                                                                        | O que mudou da v1 para a v2                                    |
-| [Migração v1 → v2](https://github.com/vinimedeirosdev/faltaket-server/blob/master/docs/MIGRACAO.md) | Passo a passo para levar os dados antigos (no faltaket-server) |
+| [Migração v1 → v2](https://github.com/vinimedeirosdev/faltaket-server/blob/main/docs/MIGRACAO.md) | Passo a passo para levar os dados antigos (no faltaket-server) |
 
 ## Estrutura
 

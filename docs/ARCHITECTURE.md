@@ -126,7 +126,7 @@ O `vite-plugin-pwa` usa a estratégia **`injectManifest`** com um service worker
 O aparelho registra o token em `users/{uid}/dispositivos/{hash}`
 ([`features/notificacoes/push.ts`](../src/features/notificacoes/push.ts)). O envio é feito
 por um job agendado no repositório faltaket-server; ver
-[LEMBRETES.md](https://github.com/vinimedeirosdev/faltaket-server/blob/master/docs/LEMBRETES.md).
+[LEMBRETES.md](https://github.com/vinimedeirosdev/faltaket-server/blob/main/docs/LEMBRETES.md).
 Com o app aberto, a mensagem vira um toast (`LembretesEmPrimeiroPlano`).
 
 ## Pastas

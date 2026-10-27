@@ -1,6 +1,6 @@
 # Modelo de dados
 
-A fonte da verdade das validações é o [`firestore.rules`](https://github.com/vinimedeirosdev/faltaket-server/blob/master/firestore.rules),
+A fonte da verdade das validações é o [`firestore.rules`](https://github.com/vinimedeirosdev/faltaket-server/blob/main/firestore.rules),
 no repositório faltaket-server. Os tipos TypeScript equivalentes estão em:
 
 - [`src/features/materias/model.ts`](../src/features/materias/model.ts): matérias, horários, faltas e notas

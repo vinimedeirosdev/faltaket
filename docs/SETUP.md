@@ -83,7 +83,7 @@ Preencha com os valores de **Configurações do projeto → Seus apps → Config
 | `VITE_FIREBASE_STORAGE_BUCKET`      | não                         | `storageBucket` (não usado hoje)                                                                                                                                                                                                                         |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | não                         | `messagingSenderId` (futuras notificações)                                                                                                                                                                                                               |
 | `VITE_FIREBASE_APP_ID`              | sim                         | `appId`                                                                                                                                                                                                                                                  |
-| `VITE_FIREBASE_VAPID_KEY`           | não                         | Chave pública Web Push para os lembretes no celular (Console → Cloud Messaging → Certificados push da Web). Sem ela os lembretes ficam desligados. Ver [LEMBRETES.md](https://github.com/vinimedeirosdev/faltaket-server/blob/master/docs/LEMBRETES.md). |
+| `VITE_FIREBASE_VAPID_KEY`           | não                         | Chave pública Web Push para os lembretes no celular (Console → Cloud Messaging → Certificados push da Web). Sem ela os lembretes ficam desligados. Ver [LEMBRETES.md](https://github.com/vinimedeirosdev/faltaket-server/blob/main/docs/LEMBRETES.md). |
 | `VITE_AUTH_EMAIL_DOMAIN`            | não (padrão `faltaket.app`) | Domínio do e-mail sintético do login. **Nunca mude depois de ter usuários**: o mesmo usuário passaria a gerar outro e-mail e não conseguiria entrar. Precisa ser igual ao `AUTH_EMAIL_DOMAIN` da migração.                                               |
 | `VITE_USE_EMULATORS`                | não (padrão `false`)        | `true` conecta nos emuladores locais                                                                                                                                                                                                                     |
 
@@ -114,7 +114,7 @@ npm run dev
 
 ### 5. (Se vier da v1) Migrar os dados
 
-Siga o [guia de migração](https://github.com/vinimedeirosdev/faltaket-server/blob/master/docs/MIGRACAO.md).
+Siga o [guia de migração](https://github.com/vinimedeirosdev/faltaket-server/blob/main/docs/MIGRACAO.md).
 Ele cria as contas no Auth **com as senhas antigas** e mantém os mesmos IDs, então
 ninguém perde nada.
 

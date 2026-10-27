@@ -45,7 +45,7 @@ Hosting → **Adicionar domínio personalizado**.
 name: Deploy
 on:
   push:
-    branches: [master]
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -89,7 +89,7 @@ jobs:
 Ordem recomendada:
 
 1. Publicar as rules (faltaket-server).
-2. Rodar a migração ([guia](https://github.com/vinimedeirosdev/faltaket-server/blob/master/docs/MIGRACAO.md)).
+2. Rodar a migração ([guia](https://github.com/vinimedeirosdev/faltaket-server/blob/main/docs/MIGRACAO.md)).
 3. Publicar este front.
 4. Validar o login com as senhas antigas.
 5. Desligar o serviço antigo no Render.
